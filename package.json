@@ -1,0 +1,27 @@
+{
+  "name": "cli-node-boilerplate",
+  "version": "1.0.0",
+  "description": "CLI para criar um boilerplate de Node.js",
+  "main": "cli.js",
+  "bin": {
+    "nodeboilerplate": "./cli.js"
+  },
+  "scripts": {
+    "test": "npm run clean && npm install && npm link && nodeboilerplate && npm unlink",
+    "clean": "rm -rf node_modules package-lock.json"
+  },
+  "keywords": [
+    "node",
+    "boilerplate",
+    "cli"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^8.3.0",
+    "execa": "^6.0.3",
+    "fs-extra": "^10.0.0",
+    "inquirer": "^9.2.17"
+  },
+  "type": "module"
+}
