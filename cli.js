@@ -8,40 +8,50 @@ import * as path from 'path';
 
 program
   .version('1.0.0')
-  .description('CLI para criar um boilerplate de Node.js')
-  .arguments('<nome_do_projeto>')
-  .action((nome_do_projeto) => {
+  .description('CLI to create a Node.js boilerplate')
+  .action(() => {
     inquirer
       .prompt([
         {
+          type: 'input',
+          name: 'project_name',
+          message: 'What is your project name?',
+          validate: (input) => {
+            if (input.trim() === '') {
+              return 'Please enter a project name.';
+            }
+            return true;
+          },
+        },
+        {
           type: 'list',
           name: 'packageManager',
-          message: 'Escolha o gerenciador de pacotes:',
+          message: 'Choose a package manager:',
           choices: ['npm', 'yarn', 'pnpm'],
           default: 'npm',
         },
         {
           type: 'list',
           name: 'framework',
-          message: 'Escolha o framework a ser utilizado:',
+          message: 'Choose a framework to use:',
           choices: ['express', 'fastify'],
           default: 'express',
         },
       ])
       .then((answers) => {
-        criarProjeto(nome_do_projeto, answers.packageManager, answers.framework);
+        createProject(answers.project_name, answers.packageManager, answers.framework);
       });
   })
   .parse(process.argv);
 
-async function criarProjeto(nome_do_projeto, packageManager, framework) {
-  const diretorioDestino = path.join(process.cwd(), nome_do_projeto);
+async function createProject(project_name, packageManager, framework) {
+  const destinationDirectory = path.join(process.cwd(), project_name);
 
-  // Cria o diretório do projeto
-  await fs.ensureDir(diretorioDestino);
+  // Create project directory
+  await fs.ensureDir(destinationDirectory);
 
-  // Cria o diretório src e os arquivos server.ts e test.server.ts
-  const srcDirPath = path.join(diretorioDestino, 'src');
+  // Create src directory and server.ts and test.server.ts files
+  const srcDirPath = path.join(destinationDirectory, 'src');
   await fs.ensureDir(srcDirPath);
 
   const serverFilePath = path.join(srcDirPath, 'server.ts');
@@ -61,14 +71,14 @@ app.listen(3000, () => {
   await fs.writeFile(serverFilePath, serverConfig);
 
   const testServerFilePath = path.join(srcDirPath, 'test.server.ts');
-  const testServerConfig = `// Arquivo de teste para o servidor
-// Implemente seus testes aqui
+  const testServerConfig = `// Test file for the server
+// Implement your tests here
 `;
 
   await fs.writeFile(testServerFilePath, testServerConfig);
 
-  // Cria o diretório .husky e o arquivo pre-commit
-  const huskyDirPath = path.join(diretorioDestino, '.husky');
+  // Create .husky directory and pre-commit file
+  const huskyDirPath = path.join(destinationDirectory, '.husky');
   await fs.ensureDir(huskyDirPath);
 
   const huskyHookFilePath = path.join(huskyDirPath, 'pre-commit');
@@ -81,10 +91,10 @@ ${packageManager} lint-staged
   await fs.writeFile(huskyHookFilePath, huskyHookConfig);
   await fs.chmod(huskyHookFilePath, '755');
 
-  // Atualiza o package.json
-  const packageJsonPath = path.join(diretorioDestino, 'package.json');
+  // Update package.json
+  const packageJsonPath = path.join(destinationDirectory, 'package.json');
   const packageJson = {
-    "name": nome_do_projeto,
+    "name": project_name,
     "version": "1.0.0",
     "description": "",
     "main": "server.ts",
@@ -131,6 +141,6 @@ ${packageManager} lint-staged
 
   await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });
 
-  console.log(`Projeto ${nome_do_projeto} criado com sucesso!`);
-  console.log(`Para começar, acesse o diretório: ${diretorioDestino}`);
+  console.log(`Project ${project_name} created successfully!`);
+  console.log(`To get started, navigate to the directory: ${destinationDirectory}`);
 }
