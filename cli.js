@@ -55,9 +55,12 @@ async function createProject(project_name, packageManager, framework) {
   await fs.ensureDir(srcDirPath);
 
   const serverFilePath = path.join(srcDirPath, 'server.ts');
-  const serverConfig = `import ${framework === 'express' ? 'express' : 'fastify'} from '${framework === 'express' ? 'express' : 'fastify'}';
+  
+  let serverConfig;
+  if (framework === 'express') {
+    serverConfig = `import express from 'express';
 
-const app = ${framework === 'express' ? 'express()' : 'fastify' }();
+const app = express();
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
@@ -67,6 +70,22 @@ app.listen(3000, () => {
   console.log('Server is running on port 3000');
 });
 `;
+  } else if (framework === 'fastify') {
+    serverConfig = `import fastify from 'fastify';
+
+const app = fastify();
+
+app.get('/test', () => {
+  return { message: 'Hello World' };
+});
+
+app.listen({
+  port: 3000,
+}).then(() => {
+  console.log('Server is running on port 3000');
+});
+`;
+  }
 
   await fs.writeFile(serverFilePath, serverConfig);
 
