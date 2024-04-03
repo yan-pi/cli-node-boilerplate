@@ -7,7 +7,7 @@ import path from 'path';
 
 program
   .version('1.0.0')
-  .description('CLI to create a Node.js boilerplate')
+  .description('A CLI tool to generate an optimized and lightweight Node.js boilerplate for quick project starts')
   .action(() => {
     inquirer
       .prompt([
@@ -27,14 +27,14 @@ program
           name: 'packageManager',
           message: 'Choose a package manager:',
           choices: ['npm', 'yarn', 'pnpm'],
-          default: 'npm',
+          default: 'pnpm',
         },
         {
           type: 'list',
           name: 'framework',
           message: 'Choose a framework to use:',
           choices: ['express', 'fastify'],
-          default: 'express',
+          default: 'fastify',
         },
       ])
       .then((answers) => {
