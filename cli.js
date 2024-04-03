@@ -7,7 +7,7 @@ import path from 'path';
 
 program
   .version('1.0.0')
-  .description('light-starter an CLI to create a lightweight Node.js boilerplate')
+  .description('CLI to create a Node.js boilerplate')
   .action(() => {
     inquirer
       .prompt([
@@ -27,14 +27,14 @@ program
           name: 'packageManager',
           message: 'Choose a package manager:',
           choices: ['npm', 'yarn', 'pnpm'],
-          default: 'pnpm',
+          default: 'npm',
         },
         {
           type: 'list',
           name: 'framework',
           message: 'Choose a framework to use:',
           choices: ['express', 'fastify'],
-          default: 'fastify',
+          default: 'express',
         },
       ])
       .then((answers) => {
@@ -106,6 +106,38 @@ ${packageManager} lint-staged
   await fs.chmod(huskyHookFilePath, '755');
 
   const packageJsonPath = path.join(destinationDirectory, 'package.json');
+
+  let dependencies = {
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0",
+    "prettier": "^3.1.1",
+    "tsup": "^8.0.1",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.1.0"
+  };
+
+  let devDependencies = {
+    "@types/node": "^20.10.5",
+  };
+
+  if (framework === 'express') {
+    dependencies = {
+      ...dependencies,
+      "@types/express": "^4.17.21",
+      "express": "^4.19.2"
+    };
+  } else if (framework === 'fastify') {
+    dependencies = {
+      ...dependencies,
+      "fastify": "^3.17.0"
+    };
+  }
+
   const packageJson = {
     "name": project_name,
     "version": "1.0.0",
@@ -134,26 +166,13 @@ ${packageManager} lint-staged
     "keywords": [],
     "author": "",
     "license": "ISC",
-    "devDependencies": {
-      "@types/express": "^4.17.21",
-      "@types/node": "^20.10.5",
-      "@typescript-eslint/eslint-plugin": "^6.15.0",
-      "@typescript-eslint/parser": "^6.15.0",
-      "eslint": "^8.56.0",
-      "eslint-config-prettier": "^9.1.0",
-      "express": "^4.18.2",
-      "husky": "^8.0.3",
-      "lint-staged": "^15.2.0",
-      "prettier": "^3.1.1",
-      "tsup": "^8.0.1",
-      "tsx": "^4.7.0",
-      "typescript": "^5.3.3",
-      "vitest": "^1.1.0"
-    }
+    "dependencies": dependencies,
+    "devDependencies": devDependencies
   };
 
   await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });
 
   console.log(`Project ${project_name} created successfully!`);
   console.log(`To get started, navigate to the directory: ${destinationDirectory}`);
+  console.log(`Tip: run ${packageManager} to install the dependencies and ${packageManager} update to update the dependencies.`);
 }
