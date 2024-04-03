@@ -2,13 +2,12 @@
 
 import { program } from 'commander';
 import inquirer from 'inquirer';
-import * as execa from 'execa';
 import fs from 'fs-extra';
-import * as path from 'path';
+import path from 'path';
 
 program
   .version('1.0.0')
-  .description('CLI to create a Node.js boilerplate')
+  .description('light-starter an CLI to create a lightweight Node.js boilerplate')
   .action(() => {
     inquirer
       .prompt([
@@ -28,14 +27,14 @@ program
           name: 'packageManager',
           message: 'Choose a package manager:',
           choices: ['npm', 'yarn', 'pnpm'],
-          default: 'npm',
+          default: 'pnpm',
         },
         {
           type: 'list',
           name: 'framework',
           message: 'Choose a framework to use:',
           choices: ['express', 'fastify'],
-          default: 'express',
+          default: 'fastify',
         },
       ])
       .then((answers) => {
@@ -47,15 +46,11 @@ program
 async function createProject(project_name, packageManager, framework) {
   const destinationDirectory = path.join(process.cwd(), project_name);
 
-  // Create project directory
   await fs.ensureDir(destinationDirectory);
 
-  // Create src directory and server.ts and test.server.ts files
   const srcDirPath = path.join(destinationDirectory, 'src');
   await fs.ensureDir(srcDirPath);
 
-  const serverFilePath = path.join(srcDirPath, 'server.ts');
-  
   let serverConfig;
   if (framework === 'express') {
     serverConfig = `import express from 'express';
@@ -87,6 +82,7 @@ app.listen({
 `;
   }
 
+  const serverFilePath = path.join(srcDirPath, 'server.ts');
   await fs.writeFile(serverFilePath, serverConfig);
 
   const testServerFilePath = path.join(srcDirPath, 'test.server.ts');
@@ -96,7 +92,6 @@ app.listen({
 
   await fs.writeFile(testServerFilePath, testServerConfig);
 
-  // Create .husky directory and pre-commit file
   const huskyDirPath = path.join(destinationDirectory, '.husky');
   await fs.ensureDir(huskyDirPath);
 
@@ -110,7 +105,6 @@ ${packageManager} lint-staged
   await fs.writeFile(huskyHookFilePath, huskyHookConfig);
   await fs.chmod(huskyHookFilePath, '755');
 
-  // Update package.json
   const packageJsonPath = path.join(destinationDirectory, 'package.json');
   const packageJson = {
     "name": project_name,
