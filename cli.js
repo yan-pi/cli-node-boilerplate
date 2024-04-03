@@ -147,7 +147,7 @@ ${packageManager} lint-staged
       "start": `tsx src/server.ts`,
       "build": "tsup src",
       "start:dev": "tsx watch src/server.ts",
-      "husky:prepare": `${packageManager} install`,
+      "husky:prepare": `npx husky init`,
       "test": "vitest",
       "test:lint": "vitest run"
     },
