@@ -4,25 +4,25 @@
   "description": "A CLI tool to generate an optimized and lightweight Node.js boilerplate for quick project starts",
   "license": "MIT",
   "repository": "YOUR-GITHUB-USERNAME/unicorn-fun-cli",
-	"author": {
-		"name": "Yan Fernandes",
-		"email": "yanfernandes404@gmail.com",
-		"url": "www.github.com/yan-pi"
-	},
+  "author": {
+    "name": "Yan Fernandes",
+    "email": "yanfernandes404@gmail.com",
+    "url": "www.github.com/yan-pi"
+  },
   "type": "module",
   "bin": {
     "light-starter": "./cli.js"
   },
-	"engines": {
-		"node": ">=12"
-	},
+  "engines": {
+    "node": ">=12"
+  },
   "scripts": {
     "test": "npm run clean && npm install && npm link && light-starter && npm unlink",
     "clean": "rm -rf node_modules package-lock.json"
   },
   "files": [
-		"cli.js"
-	],
+    "cli.js"
+  ],
   "keywords": [
     "node",
     "boilerplate",
@@ -33,5 +33,8 @@
     "execa": "^6.0.3",
     "fs-extra": "^10.0.0",
     "inquirer": "^9.2.17"
+  },
+  "dependencies": {
+    "meow": "^13.2.0"
   }
 }
