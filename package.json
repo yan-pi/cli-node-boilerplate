@@ -1,6 +1,6 @@
 {
   "name": "light-starter",
-  "version": "2.1.0",
+  "version": "2.0.0",
   "description": "A CLI tool to generate an optimized and lightweight Node.js boilerplate for quick project starts",
   "license": "MIT",
   "repository": "YOUR-GITHUB-USERNAME/unicorn-fun-cli",
@@ -29,12 +29,11 @@
     "cli"
   ],
   "devDependencies": {
+  },
+  "dependencies": {    
     "commander": "^8.3.0",
     "execa": "^6.0.3",
     "fs-extra": "^10.0.0",
     "inquirer": "^9.2.17"
-  },
-  "dependencies": {
-    "meow": "^13.2.0"
   }
 }
